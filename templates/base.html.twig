@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PushCollector{% endblock %}</title>
+    <style>
+        :root {
+            --bg: #0f1419;
+            --surface: #1a2332;
+            --border: #2d3a4d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --accent: #58a6ff;
+            --success: #3fb950;
+            --error: #f85149;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 1rem 2rem;
+            line-height: 1.5;
+        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        nav {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        nav a { margin-right: 1rem; }
+        .flash-success { color: var(--success); padding: 0.5rem 0; }
+        .flash-error { color: var(--error); padding: 0.5rem 0; }
+        pre, code {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        pre { padding: 0.75rem 1rem; white-space: pre-wrap; word-break: break-all; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+        th { background: var(--surface); color: var(--muted); }
+        .meta { color: var(--muted); font-size: 0.9em; }
+        {% block styles %}{% endblock %}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ path('inbox_index') }}">受信一覧</a>
+        <a href="{{ path('capture_receive') }}">受信エンドポイント /in</a>
+    </nav>
+    {% for message in app.flashes('success') %}
+        <p class="flash-success">{{ message }}</p>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <p class="flash-error">{{ message }}</p>
+    {% endfor %}
+    {% block body %}{% endblock %}
+</body>
+</html>

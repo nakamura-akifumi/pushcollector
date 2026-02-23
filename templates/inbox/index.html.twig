@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}受信一覧 - PushCollector{% endblock %}
+
+{% block body %}
+<h1>受信一覧</h1>
+<p class="meta">GET/POST で <code>/in</code> に送られたリクエストを保存・確認できます。</p>
+
+{% if captures is empty %}
+    <p>まだキャプチャがありません。<code>GET /in</code> または <code>POST /in</code> でデータを送ってください。</p>
+{% else %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>日時</th>
+                <th>メソッド</th>
+                <th>URI</th>
+                <th>クライアントIP</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in captures %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.capturedAt|date('Y-m-d H:i:s') }}</td>
+                <td>{{ c.method }}</td>
+                <td><code>{{ c.requestUri|slice(0, 80) }}{% if c.requestUri|length > 80 %}…{% endif %}</code></td>
+                <td>{{ c.clientIp }}</td>
+                <td>
+                    <a href="{{ path('inbox_show', { id: c.id }) }}">詳細</a>
+                    <a href="{{ path('relay_form', { id: c.id }) }}">リレー</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

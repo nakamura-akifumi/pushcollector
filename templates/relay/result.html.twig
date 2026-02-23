@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}リレー結果 #{{ capture.id }} - PushCollector{% endblock %}
+
+{% block body %}
+<p><a href="{{ path('inbox_show', { id: capture.id }) }}">詳細</a> | <a href="{{ path('relay_form', { id: capture.id }) }}">再送信</a> | <a href="{{ path('inbox_index') }}">一覧</a></p>
+<h1>リレー結果</h1>
+<p><strong>送信先:</strong> <code>{{ target_url }}</code></p>
+<p><strong>HTTP ステータス:</strong> <code>{{ status_code }}</code></p>
+
+<h2>レスポンスヘッダ</h2>
+<table>
+    <thead><tr><th>名前</th><th>値</th></tr></thead>
+    <tbody>
+        {% for name, values in response_headers %}
+        <tr>
+            <td><code>{{ name }}</code></td>
+            <td><code>{{ values is iterable ? values|join(', ') : values }}</code></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>レスポンスボディ</h2>
+<pre>{{ response_body }}</pre>
+{% endblock %}

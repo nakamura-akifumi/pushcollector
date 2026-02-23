@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}詳細 #{{ capture.id }} - PushCollector{% endblock %}
+
+{% block body %}
+<p><a href="{{ path('inbox_index') }}">← 一覧へ</a> | <a href="{{ path('relay_form', { id: capture.id }) }}">このリクエストをリレー</a></p>
+<h1>キャプチャ #{{ capture.id }}</h1>
+<p class="meta">{{ capture.capturedAt|date('Y-m-d H:i:s') }} · {{ capture.method }} · {{ capture.clientIp }}</p>
+<p><strong>Request URI:</strong> <code>{{ capture.requestUri }}</code></p>
+
+<h2>ヘッダ</h2>
+{% if payload.headers is defined and payload.headers is not empty %}
+    <table>
+        <thead><tr><th>名前</th><th>値</th></tr></thead>
+        <tbody>
+            {% for name, value in payload.headers %}
+            <tr>
+                <td><code>{{ name }}</code></td>
+                <td><code>{{ value is iterable ? value|join(', ') : value }}</code></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="meta">なし</p>
+{% endif %}
+
+<h2>ボディ（生）</h2>
+{% if payload.body_raw is defined and payload.body_raw is not empty %}
+    <pre>{{ payload.body_raw }}</pre>
+{% else %}
+    <p class="meta">空</p>
+{% endif %}
+
+<h2>ボディ（解析済み）</h2>
+{% if payload.body_parsed is defined and payload.body_parsed is not empty %}
+    <pre>{{ payload.body_parsed|json_encode(384) }}</pre>
+{% else %}
+    <p class="meta">解析データなし</p>
+{% endif %}
+
+{% if payload.query is defined and payload.query is not empty %}
+<h2>クエリパラメータ</h2>
+<pre>{{ payload.query|json_encode(384) }}</pre>
+{% endif %}
+
+{% if payload.server is defined and payload.server is not empty %}
+<h2>サーバ変数（関連分）</h2>
+<table>
+    <thead><tr><th>キー</th><th>値</th></tr></thead>
+    <tbody>
+        {% for key, value in payload.server %}
+        <tr><td><code>{{ key }}</code></td><td><code>{{ value }}</code></td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

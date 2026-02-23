@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}リレー #{{ capture.id }} - PushCollector{% endblock %}
+
+{% block body %}
+<p><a href="{{ path('inbox_show', { id: capture.id }) }}">← 詳細へ</a> | <a href="{{ path('inbox_index') }}">一覧へ</a></p>
+<h1>リレー送信 #{{ capture.id }}</h1>
+<p class="meta">{{ capture.method }} · {{ capture.requestUri|slice(0, 60) }}…</p>
+
+<form method="post" action="{{ path('relay_send', { id: capture.id }) }}">
+    <label for="target_url">送信先URL</label>
+    <input type="url" id="target_url" name="target_url" placeholder="https://example.com/webhook" size="60" required style="padding:0.5rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius:4px;">
+    <button type="submit" style="margin-left:0.5rem; padding:0.5rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius:4px; cursor: pointer;">送信</button>
+</form>
+<p class="meta">保存されたヘッダとボディを、上記URLへ {{ capture.method }} でそのまま送信します。</p>
+{% endblock %}
